@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="pt">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Fórmula 1</title>
+        <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+        <style>
+            body {
+                font-family: Arial, sans-serif;
+                margin: 0;
+                background-color: #f4f4f4;
+            }
+            header {
+                background: rgb(231, 52, 52);
+                color: white;
+                text-align: center;
+                padding: 100px 20px;
+                position: relative;
+            }
+            
+            header h1 {
+                margin: 0;
+                font-size: 3rem;
+            }
+            
+            header nav {
+                position: absolute;
+                bottom: 20px;
+                left: 50%;
+                transform: translateX(-50%);
+                display: flex;
+                gap: 20px;
+            }
+            
+            .nav-button {
+                color: white;
+                text-decoration: none;
+                font-size: 1.2rem;
+                padding: 10px 20px;
+                border: 2px solid white;
+                border-radius: 5px;
+                transition: background-color 0.3s ease, color 0.3s ease;
+            }
+            
+            .nav-button:hover {
+                background-color: white;
+                color: #333;
+            }
+            .content {
+                max-width: 800px;
+                margin: auto;
+                padding: 20px;
+                background: white;
+                border-radius: 10px;
+                box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            }
+            .full-width-image {
+                width: 100%;
+                display: block;
+            }
+            .teams-grid, .pilots-grid {
+                display: grid;
+                grid-template-columns: repeat(2, 1fr);
+                gap: 10px;
+                margin-top: 20px;
+            }
+            .team-container, .pilot-container {
+                position: relative;
+                text-align: center;
+                overflow: hidden;
+            }
+            .teams-grid img, .pilots-grid img {
+                width: 200px;
+                height: 150px;
+                object-fit: contain;
+                background-color: white;
+                padding: 5px;
+                border-radius: 5px;
+                transition: opacity 0.3s ease-in-out;
+            }
+            .team-info, .pilot-info {
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 90%;
+                height: 50%;
+                color: rgb(0, 0, 0);
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                text-align: center;
+                padding: 10px;
+                border-radius: 10px;
+                font-size: 14px;
+                opacity: 0;
+                transition: opacity 0.3s;
+            }
+            .team-container:hover img, .pilot-container:hover img {
+                opacity: 0.1;
+            }
+            .team-container:hover .team-info, .pilot-container:hover .pilot-info {
+                opacity: 1;
+            }
+            #map {
+                height: 500px; /* Altura do mapa */
+                width: 100%; /* Largura do mapa */
+                margin-top: 20px;
+                border-radius: 10px;
+                box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            }
+        </style>
+    </head>
+<body>
+    <header>
+        <h1>Fórmula 1</h1>
+        <nav>
+            <a href="#about" class="nav-button">About</a>
+            <a href="#equipas" class="nav-button">Equipas</a>
+            <a href="#pilotos" class="nav-button">Pilotos</a>
+            <a href="#calendario" class="nav-button">Calendário</a>
+        </nav>
+    </header>
+    <div class="content">
+        <h2 id="about">O que é a Fórmula 1?</h2>
+        <a href="https://www.formula1.com/" target="_blank">
+            <img src="img/f1_clique.avif" alt="Fórmula 1" class="full-width-image">
+        </a>
+        <p>A Fórmula 1 (F1) é a categoria máxima do automobilismo mundial, organizada pela FIA. As corridas, chamadas de Grandes Prémios, acontecem em diversos países ao longo do ano. É um desporto que combina tecnologia de ponta, estratégia e talento dos pilotos.</p>
+        
+        <h2 id="equipas">Equipas</h2>
+        <p>A competição conta com equipas de renome, cada uma com uma história rica e conquistas memoráveis. Aqui estão algumas das equipas mais emblemáticas:</p>
+        <div class="teams-grid">
+            <div class="team-container">
+                <img src="img/mclaren.png" alt="McLaren">
+                <div class="team-info">Fundada em 1963 por Bruce McLaren, a McLaren é uma das equipas mais icónicas da F1. Com 8 títulos de construtores e 12 de pilotos, revelou lendas como Ayrton Senna e Lewis Hamilton. Atualmente, busca retornar ao topo com Lando Norris e Oscar Piastri.</div>
+            </div>
+            <div class="team-container">
+                <img src="img/ferrari.jpg" alt="Ferrari">
+                <div class="team-info">A Ferrari é a equipa mais antiga e bem-sucedida da F1, com 16 títulos de construtores e 15 de pilotos. Fundada em 1929, é conhecida pela sua paixão e pela cor vermelha. Pilotos como Michael Schumacher e Niki Lauda fizeram história com a Scuderia.</div>
+            </div>
+            <div class="team-container">
+                <img src="img/red-bull-racing.jpg" alt="Red Bull Racing">
+                <div class="team-info">A Red Bull Racing entrou na F1 em 2005 e rapidamente se tornou uma potência, conquistando 6 títulos de construtores e 7 de pilotos. Com uma abordagem inovadora e jovens talentos como Max Verstappen, domina a era atual da F1.</div>
+            </div>
+            <div class="team-container">
+                <img src="img/mercedes.png" alt="Mercedes">
+                <div class="team-info">A Mercedes regressou à F1 em 2010 e dominou a era híbrida, com 8 títulos consecutivos de construtores entre 2014 e 2021. Lewis Hamilton e Nico Rosberg foram pilares desta era de sucesso.</div>
+            </div>
+            <div class="team-container">
+                <img src="img/aston_martin.jpg" alt="Aston Martin">
+                <div class="team-info">A Aston Martin retornou à F1 em 2021 após décadas de ausência. Com investimentos pesados e a experiência de Fernando Alonso, procura estabelecer-se entre os melhores.</div>
+            </div>
+            <div class="team-container">
+                <img src="img/alpine.png" alt="Alpine">
+                <div class="team-info">Antiga Renault, a Alpine venceu dois campeonatos com Fernando Alonso em 2005 e 2006. Agora, sob a marca Alpine, aposta em jovens talentos como Pierre Gasly e Esteban Ocon.</div>
+            </div>
+            <div class="team-container">
+                <img src="img/haas.svg" alt="Haas">
+                <div class="team-info">A Haas é a única equipa americana na F1, estreando em 2016. Conhecida por sua parceria com a Ferrari, enfrenta desafios para competir com as equipas mais estabelecidas.</div>
+            </div>
+            <div class="team-container">
+                <img src="img/visa_rb.jpg" alt="Visa RB">
+                <div class="team-info">Antiga Toro Rosso, a Visa RB é a equipa satélite da Red Bull. Revelou talentos como Sebastian Vettel e Max Verstappen. Em 2025, aposta em Yuki Tsunoda e Isack Hadjar.</div>
+            </div>
+            <div class="team-container">
+                <img src="img/Williams_racing_logo.webp" alt="Williams Racing">
+                <div class="team-info">Fundada em 1977 por Frank Williams, a equipa conquistou 9 títulos de construtores e 7 de pilotos. Apesar de anos difíceis, mantém um lugar especial no coração dos fãs.</div>
+            </div>
+            <div class="team-container">
+                <img src="img/stake.png" alt="Stake">
+                <div class="team-info">Antiga Alfa Romeo e Sauber, a Stake é uma equipa com uma longa história na F1. Em 2025, conta com Nico Hulkenberg e Gabriel Bortoleto para buscar resultados melhores.</div>
+            </div>
+        </div>
+        
+        <h2 id="pilotos">Pilotos de 2025</h2>
+        <p>Os pilotos da F1 são os protagonistas deste espetáculo. Conheça os principais nomes da temporada de 2025:</p>
+        <div class="pilots-grid">
+            <div class="pilot-container">
+                <img src="img/max.avif" alt="Max Verstappen">
+                <div class="pilot-info">Max Verstappen - 27 anos, Red Bull Racing. Quatro vezes campeão mundial (2021, 2022, 2023,2024), é conhecido pela sua agressividade e talento excecional. Domina a F1 desde a era híbrida.</div>
+            </div>
+            <div class="pilot-container">
+                <img src="img/lawson.avif" alt="Liam Lawson">
+                <div class="pilot-info">Liam Lawson - 23 anos, Red Bull Racing. Jovem promessa neozelandesa, subiu rapidamente nas categorias de base. Em 2025, tem a oportunidade de brilhar ao lado de Verstappen.</div>
+            </div>
+            <div class="pilot-container">
+                <img src="img/hamilton.avif" alt="Lewis Hamilton">
+                <div class="pilot-info">Lewis Hamilton - 40 anos, Ferrari. Sete vezes campeão mundial, é considerado um dos maiores pilotos de todos os tempos. Em 2025, busca o seu oitavo título com a Scuderia.</div>
+            </div>
+            <div class="pilot-container">
+                <img src="img/leclerc.avif" alt="Charles Leclerc">
+                <div class="pilot-info">Charles Leclerc - 27 anos, Ferrari. Piloto monegasco com um talento bruto, busca o seu primeiro título mundial. Conhecido pela sua velocidade e consistência.</div>
+            </div>
+            <div class="pilot-container">
+                <img src="img/norris.avif" alt="Lando Norris">
+                <div class="pilot-info">Lando Norris - 25 anos, McLaren. Britânico carismático e rápido, é uma das estrelas em ascensão da F1. Em 2025, continua a busca pelo seu primeiro título.</div>
+            </div>
+            <div class="pilot-container">
+                <img src="img/piastri.avif" alt="Oscar Piastri">
+                <div class="pilot-info">Oscar Piastri - 23 anos, McLaren. Australiano com um currículo impressionante nas categorias de base, é visto como uma futura estrela da F1.</div>
+            </div>
+            <div class="pilot-container">
+                <img src="img/russell.avif" alt="George Russell">
+                <div class="pilot-info">George Russell - 26 anos, Mercedes. Britânico talentoso, conhecido como "Mr. Saturday" pelas suas performances nas qualificações. Busca o seu primeiro título em 2025.</div>
+            </div>
+            <div class="pilot-container">
+                <img src="img/antonelli.avif" alt="Andrea Kimi Antonelli">
+                <div class="pilot-info">Andrea Kimi Antonelli - 25 anos, Mercedes. Jovem italiano com um futuro promissor, é a aposta da Mercedes para o futuro.</div>
+            </div>
+            <div class="pilot-container">
+                <img src="img/sainz.avif" alt="Carlos Sainz">
+                <div class="pilot-info">Carlos Sainz - 30 anos, Williams. Espanhol consistente e experiente, busca liderar a Williams de volta ao topo.</div>
+            </div>
+            <div class="pilot-container">
+                <img src="img/albon.avif" alt="Alex Albon">
+                <div class="pilot-info">Alex Albon - 28 anos, Williams. Tailandês-britânico, conhecido pela sua determinação e habilidade em corridas.</div>
+            </div>           
+            <div class="pilot-container">
+                <img src="img/alonso.avif" alt="Fernando Alonso">
+                <div class="pilot-info">Fernando Alonso - 43 anos, Aston Martin. Duas vezes campeão mundial (2005, 2006), é um dos pilotos mais experientes e respeitados da F1. Em 2025, continua a lutar por vitórias.</div>
+            </div>
+            <div class="pilot-container">
+                <img src="img/stroll.avif" alt="Lance Stroll">
+                <div class="pilot-info">Lance Stroll - 26 anos, Aston Martin. Canadiano com um estilo agressivo, busca provar o seu valor ao lado de Alonso.</div>
+            </div>
+            <div class="pilot-container">
+                <img src="img/gasly.avif" alt="Pierre Gasly">
+                <div class="pilot-info">Pierre Gasly - 29 anos, Alpine. Francês talentoso, conhecido pela sua vitória no GP da Itália de 2020. Em 2025, lidera a Alpine ao lado de Ocon.</div>
+            </div>
+            <div class="pilot-container">
+                <img src="img/doohan.avif" alt="Jack Doohan">
+                <div class="pilot-info">Jack Doohan - 22 anos, Alpine. Australiano filho do lendário motociclista Mick Doohan, Jack é uma das maiores promessas da F1. Venceu na F3 e F2, e em 2025, estreia na Alpine ao lado de Pierre Gasly.</div>
+            </div>
+            <div class="pilot-container">
+                <img src="img/ocon.avif" alt="Esteban Ocon">
+                <div class="pilot-info">Esteban Ocon - 28 anos, Haas. Francês talentoso e consistente, Ocon já venceu um Grande Prémio (Hungria 2021). Em 2025, junta-se à Haas, trazendo experiência e determinação para ajudar a equipa a subir no grid.</div>
+            </div>
+            <div class="pilot-container">
+                <img src="img/bearman.avif" alt="Oliver Bearman">
+                <div class="pilot-info">Oliver Bearman - 20 anos, Haas. Britânico jovem e talentoso, é uma das revelações da temporada de 2025.</div>
+            </div>
+            <div class="pilot-container">
+                <img src="img/tsunoda.avif" alt="Yuki Tsunoda">
+                <div class="pilot-info">Yuki Tsunoda - 25 anos, Racing Bulls. Japonês rápido e agressivo, busca consolidar-se na F1 em 2025.</div>
+            </div>
+            <div class="pilot-container">
+                <img src="img/hadjar.avif" alt="Isack Hadjar">
+                <div class="pilot-info">Isack Hadjar - 21 anos, Racing Bulls. Francês jovem e promissor, é a nova aposta da Red Bull para o futuro.</div>
+            </div>
+            <div class="pilot-container">
+                <img src="img/hulkenberg.avif" alt="Nico Hulkenberg">
+                <div class="pilot-info">Nico Hulkenberg - 37 anos, Kick Sauber. Alemão experiente, conhecido pela sua consistência e habilidade em corridas.</div>
+            </div>
+            <div class="pilot-container">
+                <img src="img/bortoleto.avif" alt="Gabriel Bortoleto">
+                <div class="pilot-info">Gabriel Bortoleto - 21 anos, Kick Sauber. Brasileiro jovem e talentoso, é a nova esperança da Sauber para 2025.</div>
+            </div>
+        </div>
+
+        <h2 id="calendario">Calendário de Corridas 2025</h2>
+        <p>Veja no mapa abaixo os locais onde ocorrerão as corridas da temporada 2025:</p>
+        <div id="map"></div>
+    </div>
+
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+    <script>
+        const map = L.map('map').setView([20, 0], 2);
+
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '© OpenStreetMap contributors'
+        }).addTo(map);
+
+        const circuits = [
+            { name: "Melbourne", location: [-37.8497, 144.9687], country: "Austrália", date: "14-16 Março 2025" },
+            { name: "Xangai", location: [31.3389, 121.2202], country: "China", date: "21-23 Março 2025" },
+            { name: "Suzuka", location: [34.8431, 136.5411], country: "Japão", date: "24-26 Março 2025" },
+            { name: "Sakhir", location: [26.0325, 50.5106], country: "Bahrein", date: "11-13 Abril 2025" },
+            { name: "Jeddah", location: [21.6319, 39.1044], country: "Arábia Saudita", date: "18-20 Abril 2025" },
+            { name: "Miami", location: [25.9581, -80.2389], country: "EUA", date: "2-4 Maio 2025" },
+            { name: "Ímola", location: [44.3439, 11.7167], country: "Itália", date: "16-18 Maio 2025" },
+            { name: "Monte Carlo", location: [43.7347, 7.4206], country: "Mónaco", date: "23-25 Maio 2025" },
+            { name: "Barcelona", location: [41.57, 2.2611], country: "Espanha", date: "30 Maio - 1 Junho 2025" },
+            { name: "Montreal", location: [45.5, -73.5228], country: "Canadá", date: "13-15 Junho 2025" },
+            { name: "Spielberg", location: [47.2197, 14.7647], country: "Áustria", date: "27-29 Junho 2025" },
+            { name: "Silverstone", location: [52.0786, -1.0169], country: "Reino Unido", date: "4-6 Julho 2025" },
+            { name: "Budapeste", location: [47.5819, 19.2508], country: "Hungria", date: "1-3 Agosto 2025" },
+            { name: "Zandvoort", location: [52.3886, 4.5408], country: "Países Baixos", date: "29-31 Agosto 2025" },
+            { name: "Monza", location: [45.6156, 9.2814], country: "Itália", date: "5-7 Setembro 2025" },
+            { name: "Baku", location: [40.3725, 49.8533], country: "Azerbaijão", date: "19-21 Setembro 2025" },
+            { name: "Singapura", location: [1.2914, 103.8639], country: "Singapura", date: "24-26 Outubro 2025" },
+            { name: "Cidade do México", location: [19.4064, -99.0917], country: "México", date: "17-18 Novembro 2025" },
+            { name: "São Paulo", location: [-23.7036, -46.6997], country: "Brasil", date: "20-22 Novembro 2025" },
+            { name: "Las Vegas", location: [36.1028, -115.165], country: "EUA", date: "28-30 Novembro 2025" },
+            { name: "Lusail", location: [25.49, 51.4542], country: "Qatar", date: "28-30 Novembro 2025" },
+            { name: "Abu Dhabi", location: [24.4672, 54.6039], country: "Emirados Árabes Unidos", date: "Dezembro 2025" }
+        ];
+
+        // Adiciona os pins ao mapa
+        circuits.forEach(circuit => {
+            L.marker(circuit.location)
+                .addTo(map)
+                .bindPopup(`<b>${circuit.name}</b><br>${circuit.country}<br>Data: ${circuit.date}`); // Exibe nome, país e data
+        });
+    </script>
+</body>
+</html>
