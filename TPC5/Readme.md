@@ -1,4 +1,4 @@
-# TPC5 - Desenvolvimento de Rotas em Flask
+# TPC5
 
 Este trabalho consistiu na implementação de uma aplicação Flask que permite a visualização de uma lista de conceitos médicos e a navegação para páginas individuais de cada conceito, onde são exibidas as suas descrições. A aplicação utiliza templates HTML para renderizar as páginas e rotas dinâmicas para acessar os conceitos específicos.
 
