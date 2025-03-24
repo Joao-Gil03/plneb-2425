@@ -1,0 +1,22 @@
+{% extends 'layout.html' %}
+
+{% block head %}
+<title>Conceitos</title>
+{% endblock %}
+
+{% block body %}
+<h1>Resultados da Pesquisa: "{{ termo }}"</h1>
+
+
+{% if resultados %}
+<div class="list-group">
+    {% for designacao in resultados %}
+        <a href="/conceitos/{{ designacao }}" class="list-group-item list-group-item-action">{{ designacao }}</a>
+    {% endfor %}
+</div>
+{% else %}
+<p>Nenhum resultado encontrado para "{{ termo }}".</p>
+{% endif %}
+
+<a href="/pesquisa" class="btn btn-primary mt-3">Voltar</a>
+{% endblock %}
