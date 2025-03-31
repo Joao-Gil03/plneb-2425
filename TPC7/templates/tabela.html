@@ -1,0 +1,31 @@
+{% extends 'layout.html' %}
+
+{% block head %}
+<title> {{title}} </title>
+{% endblock %}
+
+{% block body %}
+
+
+<table id="tabela_conceitos" class="table table-striped table-bordered table-hover">
+    <thead>
+        <tr>
+            <th>Designação</th>
+            <th>Descrição</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for designacao, descricao in conceitos.items() %}    
+        <tr>
+            <td>
+                <a href="/conceitos/{{ designacao }}" class="text-decoration-none text-dark">  {{ designacao }}</a>
+            </td>
+            <td>
+                <a href="/conceitos/{{ designacao }}" class="text-decoration-none text-dark">{{ descricao }}</a>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+{% endblock %}
